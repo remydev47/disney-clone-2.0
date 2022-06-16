@@ -1,0 +1,44 @@
+import Head from "next/head";
+import { useSession } from "next-auth/client";
+import Hero from "../components/Hero";
+import Brands from "../components/Brands";
+import Header from "../components/Header";
+import Slider from "../components/Slider";
+import MoviesCollections from "../components/MoviesCollection";
+import ShowsCollection from "../components/ShowsCollection";
+
+export default function Home() {
+  const [session] = useSession();
+  return (
+    <div className="">
+      <Head>
+        <title>Disney Clone</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <Header />
+      {!session ? (
+        <Hero />
+      ): (
+        <main className="relative min-h-screen after:bg-home after:bg-center after:bg-cover after:bg-no-repeat after:bg-fixed after:bg-absolute after:inset-0 after:z-[-1]">
+          <Slider />
+          <Brands />
+          <MoviesCollections />
+          <ShowsCollection />
+        </main>  
+      )}
+    </div>
+  );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  return {
+      props: {
+          session,
+      },
+  };
+}
+
+  
